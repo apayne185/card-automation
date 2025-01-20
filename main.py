@@ -6,6 +6,7 @@ from jinja2 import Environment, FileSystemLoader
 from googleapiclient.discovery import build
 from dotenv import load_dotenv
 
+load_dotenv()
 
 SCOPES = ["https://www.googleapis.com/auth/spreadsheets.readonly"]
 SHEET_ID = os.getenv("SHEET_ID")
@@ -21,10 +22,10 @@ SHEET_RANGE= "Sheet1D:J"     #sheet/page 1 cols D:J
 
 
 def fetch_sheet_data():
-    creds = Credentials.from_service_account_file("credentials.json", scope=SCOPES)     #authenticates using API w service account json file
+    creds = Credentials.from_service_account_file("credentials.json", scopes=SCOPES)     #authenticates using API w service account json file
     service = build("sheets", "v4", credentials=creds)      #builds sheets API service object
     sheet = service.spreadsheets()
-    result = sheet.value().get(spreadsheetId=SHEET_ID, range=SHEET_RANGE).execute()     #fetches range for sheet
+    result = sheet.values().get(spreadsheetId=SHEET_ID, range=SHEET_RANGE).execute()     #fetches range for sheet
     return result.get("values", [])     #list of lists
 
 
@@ -48,11 +49,13 @@ def generate_cards(data):
         template_file = f"template{template_choice}.html"    #chooses template
         template = env.get_template(template_file)
 
-        output_html = template.render(message_address_address=message_address, message_body=message_body, sender_signature=sender_signature)
+
+        output_html = template.render(message_address=message_address, message_body=message_body, sender_signature=sender_signature)
         output_png = convert_to_png(output_html)
 
         recipient_name_arr = recipient_name.split()
-        card_name = str(recipient_name_arr[-1] + recipient_name_arr[:-1])
+        # card_name = str(recipient_name_arr[-1] + recipient_name_arr[:-1])
+        card_name = "_".join(recipient_name.split())
 
         output_path = os.path.join("cards_png", f"{card_name}.png")
         with open(output_path, "w") as f:
@@ -82,7 +85,7 @@ def convert_to_png(card_html):
 
 
 def main():
-    os.makedirs("cards", exist_ok=True)
+    os.makedirs("cards_png", exist_ok=True)
 
     data = fetch_sheet_data()
     if not data:
