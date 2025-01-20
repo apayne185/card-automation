@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Happy Valentine's Day</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Pacifico">
+    <style>
+        body {
+            font-family: 'Pacifico', cursive;
+            background-color: white;
+            background-image: url('https://imgur.com/0z2kvaf.jpg');  /* Change background color to pink or red based on user choice */
+            text-align: center;
+            margin: 0;
+            padding: 40px;
+        }
+        h1 {
+            color: #e83e8c;
+            font-size: 2.5em;
+            background-color: #ffd6e6;
+            padding: 10px 20px;
+            border-radius: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+            display: block;
+        }
+        p {
+            color: #e83e8c;
+            font-size: 1.2em;
+            line-height: 1.5;
+            text-align: center;
+        }
+        img {
+            max-width: 60%;
+            height: auto;
+            border-radius: 15px;
+            margin-top: 15px;
+        }
+        .message-box {
+            background-color: #fff;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+            border: 8px solid rgb(238, 88, 113);
+            text-align: left;
+        }
+        .align-left {
+            text-align: left;
+        }
+        .align-right {
+            text-align: right;
+        }
+        .logo {
+            max-width: 100px;
+            box-shadow: none;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Happy Valentines Day!</h1>
+
+    <img src="https://content.mycutegraphics.com/graphics/valentine/valentine-heart-clip-art-2.png" alt="Heart Image" />
+
+    <div class="message-box">
+        <p class="align-left">{{ message_address }}</p>
+        <p>{{ message_body }}</p>
+        <p class="align-right"> {{ sender_signature }}</p>
+    </div>
+    <img class="logo" src="https://imgur.com/pgZIb19.png" alt="Club Logo" />
+</body>
+</html>
