@@ -9,7 +9,15 @@ from dotenv import load_dotenv
 
 SCOPES = ["https://www.googleapis.com/auth/spreadsheets.readonly"]
 SHEET_ID = os.getenv("SHEET_ID")
-SHEET_RANGE= "Sheet1!G:J"     #sheet/page 1 cols G:J   
+SHEET_RANGE= "Sheet1D:J"     #sheet/page 1 cols D:J   
+
+'''
+    col d:[3] = recipient_name
+    col g:[6] = template_choice 
+    col h:[7] = message_address    ("dear ____")
+    col i:[8] = message_body       ("happy valentines day!")
+    col j:[9] = sender_signature   ("love ___")
+'''
 
 
 def fetch_sheet_data():
@@ -27,11 +35,20 @@ def generate_cards(data):
     env = Environment(loader=FileSystemLoader("templates"))   #sets up Jinja2 environment
 
     for i, row in enumerate(data[1:], start=1):     #skips header row 
-        template_choice, recipient_name, message_body, sender_signature = row
+        try:
+            recipient_name = row[0]
+            template_choice= row[3]
+            message_address = row[4]
+            message_body = row[5]
+            sender_signature = row[6]
+        except:
+            print(f"Skipping row {i} due to insufficient data: {row}")
+            continue
+
         template_file = f"template{template_choice}.html"    #chooses template
         template = env.get_template(template_file)
 
-        output_html = template.render(recipient_name=recipient_name, message_body=message_body, sender_signature=sender_signature)
+        output_html = template.render(message_address_address=message_address, message_body=message_body, sender_signature=sender_signature)
         output_png = convert_to_png(output_html)
 
         recipient_name_arr = recipient_name.split()
