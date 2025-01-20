@@ -49,6 +49,7 @@ def generate_cards(data):
         template_file = f"template{template_choice}.html"    #chooses template
         template = env.get_template(template_file)
 
+
         output_html = template.render(message_address=message_address, message_body=message_body, sender_signature=sender_signature)
         output_png = convert_to_png(output_html)
 
