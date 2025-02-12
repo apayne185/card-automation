@@ -45,8 +45,11 @@ def fetch_sheet_data():
 
 
 
+
+
 def generate_cards(data):
     env = Environment(loader=FileSystemLoader("templates"))   #sets up Jinja2 environment
+    recipient_count = {}
 
     for i, row in enumerate(data[1:], start=1):     #skips header row 
         # if len(row) < 6:
@@ -84,7 +87,14 @@ def generate_cards(data):
         # recipient_name_arr = recipient_name.split()
         card_name = "_".join(recipient_name.split())
 
-        output_path = os.path.join("cards_png", f"{card_name}.png")
+        if card_name in recipient_count:
+            recipient_count[card_name] += 1
+        else:
+            recipient_count[card_name] = 1
+
+        numbered_card_name = f"{card_name}_{recipient_count[card_name]:02d}"
+
+        output_path = os.path.join("cards_png", f"_{numbered_card_name}.png")
         # with open(output_path, "w") as f:
         #     f.write(output_png)
             
