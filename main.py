@@ -46,16 +46,12 @@ def fetch_sheet_data():
 
 
 
-
 def generate_cards(data):
-    env = Environment(loader=FileSystemLoader("templates"))   #sets up Jinja2 environment
     recipient_count = {}
 
-    for i, row in enumerate(data[1:], start=1):     #skips header row 
-        # if len(row) < 6:
-        #     print(f"Skipping row {i} due to missing data: {row}")
-        #     continue
+    env = Environment(loader=FileSystemLoader("templates"))   #sets up Jinja2 environment
 
+    for i, row in enumerate(data[1:], start=1):     #skips header row 
         clean_row = [cell.strip() if isinstance(cell, str) else cell for cell in row]
         print(f"Row {i}: {clean_row}")
 
