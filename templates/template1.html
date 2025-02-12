@@ -2,44 +2,75 @@
 <html>
 <head>
     <title>Happy Valentine's Day</title>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Pacifico">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono&display=swap" rel="stylesheet">
     <style>
-        body {
-            font-family: 'Pacifico', cursive;
+        html, body {
             background-color: white;
-            background-image: url('https://imgur.com/0z2kvaf.jpg');  /* Change background color to pink or red based on user choice */
-            text-align: center;
+            background-image: url('https://imgur.com/0z2kvaf.jpg');
+            background-position: center;
+            overflow: hidden;
+            width: 1000px;
+            height: 800px;
             margin: 0;
-            padding: 40px;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        html, body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        /* .background {
+            position: fixed; 
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-image: url('https://imgur.com/0z2kvaf.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            z-index: -1; 
+        } */
+        .content-wrapper {
+            width: 675px;
+            height: auto;
+            text-align: center;
+            background-color: #fff;
+            border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            border: 4px solid #e83e8c;
+            position: relative;
+            margin-top: 140px;
+            margin-left:142px;
         }
         h1 {
             color: #e83e8c;
-            font-size: 2.5em;
-            background-color: #ffd6e6;
-            padding: 10px 20px;
-            border-radius: 10px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
-            display: block;
+            font-size: 50px;
         }
         p {
             color: #e83e8c;
-            font-size: 1.2em;
+            font-size: 1.5em;
             line-height: 1.5;
-            text-align: center;
-        }
-        img {
-            max-width: 60%;
-            height: auto;
-            border-radius: 15px;
-            margin-top: 15px;
         }
         .message-box {
-            background-color: #fff;
-            padding: 15px;
+            background-color: #ffd6e6;
+            padding: 25px;
             border-radius: 10px;
             margin-top: 20px;
-            border: 8px solid rgb(238, 88, 113);
-            text-align: left;
+            border: 2px solid #e83e8c;
         }
         .align-left {
             text-align: left;
@@ -48,22 +79,25 @@
             text-align: right;
         }
         .logo {
-            max-width: 100px;
+            width: 70px;
+            height: 70px;
             box-shadow: none;
+            margin-top: 20px;
         }
     </style>
 </head>
+
+
 <body>
-
-    <h1>Happy Valentines Day!</h1>
-
-    <img src="https://content.mycutegraphics.com/graphics/valentine/valentine-heart-clip-art-2.png" alt="Heart Image" />
-
-    <div class="message-box">
-        <p class="align-left">{{ message_address }}</p>
-        <p>{{ message_body }}</p>
-        <p class="align-right"> {{ sender_signature }}</p>
+    <div class="background"></div>
+    <div class="content-wrapper">
+        <h1> &lt;  Happy Valentines Day!  &gt;</h1>
+        <div class="message-box">
+            <p class="align-left">{{ message_address }}</p>
+            <p>{{ message_body }}</p>
+            <p class="align-right">{{ sender_signature }}</p>
+        </div>
+        <img class="logo" src="https://imgur.com/pgZIb19.png" alt="Club Logo" />
     </div>
-    <img class="logo" src="https://imgur.com/pgZIb19.png" alt="Club Logo" />
 </body>
 </html>

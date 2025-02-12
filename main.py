@@ -10,7 +10,9 @@ load_dotenv()
 
 SCOPES = ["https://www.googleapis.com/auth/spreadsheets.readonly"]
 SHEET_ID = os.getenv("SHEET_ID")
-SHEET_RANGE= "Sheet1D:J"     #sheet/page 1 cols D:J   
+# SHEET_RANGE= "Sheet1!D:J"     #sheet/page 1 cols D:J   
+SHEET_RANGE= "FormResponses1!C:J"
+
 
 '''
     col d:[3] = recipient_name
@@ -25,10 +27,21 @@ def fetch_sheet_data():
     creds = Credentials.from_service_account_file("credentials.json", scopes=SCOPES)     #authenticates using API w service account json file
     service = build("sheets", "v4", credentials=creds)      #builds sheets API service object
     sheet = service.spreadsheets()
-    result = sheet.values().get(spreadsheetId=SHEET_ID, range=SHEET_RANGE).execute()     #fetches range for sheet
-    return result.get("values", [])     #list of lists
 
+    try:
+        result = sheet.values().get(spreadsheetId=SHEET_ID, range=SHEET_RANGE).execute()
+        data = result.get("values", [])
 
+        if not data:
+            print("No data found in Google Sheets.")
+            return []
+        
+        print("Fetched Data:", data) 
+        return data
+
+    except Exception as e:
+        print(f"Error fetching Google Sheets data: {e}")
+        return []
 
 
 
@@ -36,30 +49,48 @@ def generate_cards(data):
     env = Environment(loader=FileSystemLoader("templates"))   #sets up Jinja2 environment
 
     for i, row in enumerate(data[1:], start=1):     #skips header row 
+        # if len(row) < 6:
+        #     print(f"Skipping row {i} due to missing data: {row}")
+        #     continue
+
+        clean_row = [cell.strip() if isinstance(cell, str) else cell for cell in row]
+        print(f"Row {i}: {clean_row}")
+
+        recipient_name = clean_row[0].strip()
+        template_choice = clean_row[3].strip()
+        message_address = clean_row[4].strip()
+        message_body = clean_row[5].strip()
+        sender_signature = clean_row[6].strip()
+
+        template_file = f"template{template_choice}.html"
+
         try:
-            recipient_name = row[0]
-            template_choice= row[3]
-            message_address = row[4]
-            message_body = row[5]
-            sender_signature = row[6]
-        except:
-            print(f"Skipping row {i} due to insufficient data: {row}")
+            template = env.get_template(template_file)
+        except Exception as e:
+            print(f"Template loading error for {template_file}: {e}")
             continue
 
-        template_file = f"template{template_choice}.html"    #chooses template
-        template = env.get_template(template_file)
+        # template_file = f"template{template_choice}.html"    #chooses template
+        # template = env.get_template(template_file)
 
 
-        output_html = template.render(message_address=message_address, message_body=message_body, sender_signature=sender_signature)
+        output_html = template.render(
+            message_address=message_address, 
+            message_body=message_body, 
+            sender_signature=sender_signature)
+        
         output_png = convert_to_png(output_html)
 
-        recipient_name_arr = recipient_name.split()
-        # card_name = str(recipient_name_arr[-1] + recipient_name_arr[:-1])
+        # recipient_name_arr = recipient_name.split()
         card_name = "_".join(recipient_name.split())
 
         output_path = os.path.join("cards_png", f"{card_name}.png")
-        with open(output_path, "w") as f:
+        # with open(output_path, "w") as f:
+        #     f.write(output_png)
+            
+        with open(output_path, "wb") as f:  
             f.write(output_png)
+
         print(f"Generated: {output_path}")
 
 
@@ -70,17 +101,25 @@ def convert_to_png(card_html):
     options = {
             'format': 'png',  
             'quality': 100,   
-            'width': 800,  
-            'height': 600   
+            'width': 1000,  
+            'height': 800,   
+            'crop-h': '800',
+            'crop-w': '1000',
+            'enable-local-file-access': ''
         }
     
     try:
         imgkit.from_string(card_html, temp_path, options=options)
         with open(temp_path, "rb") as f:
-            return f.read()  # returns binary content of png 
+            output_png = f.read()  # returns binary content of png 
+        os.remove(temp_path)  
+        return output_png
     except Exception as e:
         print(f"Error generating PNG: {e}")
         return None
+
+
+
 
 
 
