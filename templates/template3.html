@@ -14,10 +14,16 @@
             margin: 0;
             padding: 15px;
         }
+        h1 {
+            color: white;
+            font-size: 90px;
+            line-height: 1.2;
+            text-align: center; 
+        }
 
         p {
             color: white;
-            font-size: 90px;
+            font-size: 30px;
             line-height: 1.2;
             text-align: center; 
         }
@@ -60,9 +66,9 @@
 <body>
 
     <div class="message-box">
-        <p class="align-left"><strong>{{ message_address }}</strong></p>
+        <h1 class="align-left"><strong>{{ message_address }}</strong></h1>
         <p><strong>{{ message_body }}</strong></p> 
-        <p class="align-right"><strong>{{ sender_signature }} </strong></p>
+        <h1 class="align-right"><strong>{{ sender_signature }} </strong></h1>
     </div>
     <h2>IE CODING CLUB</h2>
 </body>
